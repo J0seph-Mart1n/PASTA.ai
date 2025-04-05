@@ -8,6 +8,7 @@ import { Logo2 } from '@/Images';
 import { FIREBASE_DB, FIREBASE_AUTH } from '@/FirebaseConfig';
 import { collection, query, orderBy, getDocs, limit, addDoc, serverTimestamp } from "firebase/firestore";
 import { FITNESS_API_URL } from '@/constants';
+import { SET_USER_ID } from '@/constants';
 
 // Main Fitness_Chat component
 export function Fitness_Chat() {
@@ -23,11 +24,11 @@ export function Fitness_Chat() {
         const messagesRef = collection(db, "users", userUid, "fitnessMessages");
         const q = query(
             messagesRef,
-            orderBy("timestamp"),
+            orderBy("timestamp", "desc"),
             limit(messageLimit)
         );
         const querySnapshot = await getDocs(q);
-        const messages = [];
+        var messages = [];
         querySnapshot.forEach((doc) => {
             const messageData = {
                 parts: [{ text: doc.data().content }],
@@ -35,6 +36,7 @@ export function Fitness_Chat() {
             };
             messages.push(messageData);
         });
+        messages = messages.reverse();
         setChat(messages);
     }
 
@@ -78,6 +80,8 @@ export function Fitness_Chat() {
 
         try {
             // Make API call to fetch bot response
+            const USER_ID = FIREBASE_AUTH.currentUser?.uid;
+            const set_user_id = await axios.get(`${SET_USER_ID}/${USER_ID}`);
             const response = await axios.get(`${FITNESS_API_URL}/${userInput}`);
             console.log("Agent Response", response.data['response']);
 

@@ -9,8 +9,14 @@ interface RouterProps {
 }
 
 const Task_Manager = ({ navigation, route } : RouterProps) => {
-    const [isChecked, setIsChecked] = useState(true);
-    const iconName = isChecked ? 'checkbox-marked' : 'checkbox-blank-outline';
+    const [checkedTasks, setCheckedTasks] = useState<{ [key: string]: boolean }>({});
+
+    const toggleCheckbox = (taskId: string) => {
+      setCheckedTasks((prev) => ({
+        ...prev,
+        [taskId]: !prev[taskId], // Toggle the state for this specific task
+      }));
+    };
     
     const taskDetails = [{
       'taskId': '001',
@@ -45,53 +51,59 @@ const Task_Manager = ({ navigation, route } : RouterProps) => {
     <SafeAreaView style={styles.container}>
       <Text style={styles.header}>Your Tasks</Text>
       <ScrollView style={styles.taskRows}>
-      {taskDetails.map((item, index) => (
-        <View style={styles.taskContainer}>
-        <Pressable style={styles.checkbox} onPress={() => setIsChecked(!isChecked)}>
-            <MaterialCommunityIcons name={iconName} size={25} color="black" />
-        </Pressable>
-        <View style={{paddingLeft: 10}}>
-            <Text style={styles.taskTitle}>{item.taskName}</Text>
-            <View style={styles.taskDetails}>
-                <Text style={styles.date}>{item.taskDate.toLocaleDateString()}</Text>
-                <Text>{item.taskCategory}</Text>
-                <Text>{item.taskPriority}</Text>
+      {taskDetails.map((item, index) => {
+        const isChecked = checkedTasks[item.taskId] || false;
+        const iconName = isChecked ? 'checkbox-marked' : 'checkbox-blank-outline';
+        return (
+          <View key={index} style={styles.taskContainer}>
+          <Pressable style={styles.checkbox} onPress={() => toggleCheckbox(item.taskId)}>
+              <MaterialCommunityIcons name={iconName} size={25} color="black" />
+          </Pressable>
+          <View style={{paddingLeft: 10}}>
+              <Text style={styles.taskTitle}>{item.taskName}</Text>
+              <View style={styles.taskDetails}>
+                  <Text style={styles.date}>{item.taskDate.toLocaleDateString()}</Text>
+                  <Text>{item.taskCategory}</Text>
+                  <Text>{item.taskPriority}</Text>
+              </View>
+          </View>
+  
+          <Pressable style={styles.viewTaskButton}  onPress={() => {navigation.navigate('TaskView', {
+            INtaskId : item.taskId,
+            INtaskName: item.taskName,
+            INtaskDescription: item.taskDescription,
+            INtaskCategory: item.taskCategory,
+            INtaskPriority: item.taskPriority,
+            INtaskDate: item.taskDate,
+            INtaskTime: item.taskTime,
+            INsubTasks: item.subTasks
+          })}}>
+            <View style={styles.viewTask}>
+                <MaterialCommunityIcons name='clipboard-outline' size={30} color="black"/>
             </View>
+          </Pressable>
+          
+          <Pressable style={styles.deleteTaskButton}>
+            <View style={styles.deleteTask}>
+                <MaterialCommunityIcons name="delete-outline" size={25} color="black"/>
+            </View>
+          </Pressable>
+  
         </View>
-
-        <Pressable style={styles.viewTaskButton}  onPress={() => {navigation.navigate('TaskView', {
-          taskName: item.taskName,
-          taskDescription: item.taskDescription,
-          taskCategory: item.taskCategory,
-          taskPriority: item.taskPriority,
-          taskDate: item.taskDate,
-          taskTime: item.taskTime,
-          subTasks: item.subTasks
-        })}}>
-          <View style={styles.viewTask}>
-              <MaterialCommunityIcons name='clipboard-outline' size={30} color="black"/>
-          </View>
-        </Pressable>
+        )
         
-        <Pressable style={styles.deleteTaskButton}>
-          <View style={styles.deleteTask}>
-              <MaterialCommunityIcons name="delete-outline" size={25} color="black"/>
-          </View>
-        </Pressable>
-
-      </View>
-      ))}
+      })}
       </ScrollView>
       <View style={styles.addTask}>
         <Pressable style={styles.addTaskButton} onPress={() => {navigation.navigate('TaskView', {
-          taskId: 'new',
-          taskName: 'MyTasks',
-          taskDescription: 'Task Description',
-          taskCategory: '1',
-          taskPriority: '2',
-          taskDate: new Date(),
-          taskTime: new Date(),
-          subTasks: [{'key': 'subTask1'}, {'key': 'subTask2'}]
+          INtaskId: '',
+          INtaskName: '',
+          INtaskDescription: '',
+          INtaskCategory: '1',
+          INtaskPriority: '2',
+          INtaskDate: new Date(),
+          INtaskTime: new Date(),
+          INsubTasks: [{'key': 'subTask1'}]
         })}}>
             <MaterialCommunityIcons name="plus" size={25} color='black'/>
         </Pressable>
