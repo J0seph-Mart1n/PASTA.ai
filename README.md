@@ -47,8 +47,8 @@ Make sure you have the following installed:
 
 ### Clone the Repository
 ```sh
-git clone https://github.com/your-username/your-repo.git
-cd your-repo
+git clone https://github.com/MrNoBody86/PASTA.ai.git
+cd PASTA-App
 ```
 
 ### Install Dependencies
@@ -60,28 +60,39 @@ npm install
 ```sh
 npx expo start
 ```
+or
+```sh
+npm start
+```
 
 ### Start the Flask API Server
-Navigate to your API folder and run:
-```sh
-python app.py
-```
+1. Create a folder in your PC and install Virtual Environment (venv).
+2. Activate venv by typing the following command in terminal and press enter.
+    ```sh
+    .\venv\Scripts\Activate.ps1
+    ```
+3. Copy all the files from FlaskAPI_Server to your folder.
+4. Type the following command to install the python packages.
+    ```sh
+    pip install requirements.txt
+    ```
+5. Replace the API Keys in .env with your keys.
+6. Add serviceAccountKey.json from Firebase for reading and writing data from firestore.
+7. The folder structure should look like this
+
+    ![Backend Server folder Structure](PASTA-App/assets/images/Backend%20Server%20Directory%20Structure.png)
+    
+8. Now run the python application.
+    ```sh
+    python app.py
+    ```
+9. Deploy the directory on Render or Vercel to integrate it with frontend.
 
 ---
 
-## 📁 Project Structure
+## 📁 React Native Project Structure
 
-```
-📂 root-directory
-│── 📂 components  # React Native UI components
-│── 📂 screens     # Application screens
-│── 📂 images      # Image assets
-│── 📂 api         # Backend API integration
-│── 📄 App.js      # Main application entry point
-│── 📄 FirebaseConfig.js  # Firebase setup
-│── 📄 package.json  # Project dependencies
-│── 📄 README.md  # Project documentation
-```
+![Backend Server folder Structure](PASTA-App/assets/images//Frontend%20Directory%20Structure.png)
 
 ---
 
@@ -112,6 +123,7 @@ Ensure that your **FirebaseConfig.js** is correctly set up with your **API Key a
 - Improve **AI chatbot responses** with better training data.
 - Introduce **dark mode** for better UI experience.
 - Optimize performance with **background data fetching**.
+- Add **Fitness Tracker** page for tracking your fitness activities.
 
 ---
 
@@ -126,5 +138,5 @@ This project is licensed under the **MIT License**. See [LICENSE](LICENSE) for d
 ---
 
 ## ✉️ Contact
-For any inquiries or support, reach out to **your-email@example.com**.
+For any inquiries or support, reach out to **jmkl0987@gmail.com**.
 

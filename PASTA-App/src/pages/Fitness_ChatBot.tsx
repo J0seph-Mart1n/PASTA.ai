@@ -33,6 +33,7 @@ export function Fitness_Chat() {
             const messageData = {
                 parts: [{ text: doc.data().content }],
                 role: doc.data().sender,
+                id: doc.id,
             };
             messages.push(messageData);
         });
@@ -43,8 +44,8 @@ export function Fitness_Chat() {
     // Load messages on component mount
     useEffect(() => {
         if(FIREBASE_AUTH.currentUser?.uid){
-                    getRecentFitnessChatbotMessages(FIREBASE_DB, FIREBASE_AUTH.currentUser.uid, 10);
-                }
+            getRecentFitnessChatbotMessages(FIREBASE_DB, FIREBASE_AUTH.currentUser.uid, 10);
+        }
                 // console.log("Stored Messages:",message);
     }, []);
 
@@ -129,6 +130,7 @@ export function Fitness_Chat() {
             <ChatBubble
                 role={item.role}
                 text={item.parts[0].text}
+                messageId={item.id}
                 onSpeech={() => handleSpeech(item.parts[0].text)}
             />
         );
